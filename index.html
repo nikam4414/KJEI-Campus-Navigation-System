@@ -1,0 +1,1273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Trinity Campus Navigator — Manual Multilingual</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+
+<style>
+html,body{
+    height:100%;
+    margin:0;
+    font-family:'Poppins',sans-serif;
+} 
+/* Welcome Screen */
+
+#welcomeScreen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:url("KJEI.jpg") center/cover no-repeat;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    z-index:9999;
+}
+
+.overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(6px);
+}
+
+.welcome-content{
+    position:relative;
+    text-align:center;
+    color:white;
+}
+
+.logo{
+    width:180px;
+    height:auto;
+    margin-bottom:20px;
+    animation:logoFloat 3s ease-in-out infinite;
+    filter:drop-shadow(0 12px 25px rgba(0,0,0,.45));
+}
+
+.welcome-title{
+    font-size:68px;
+    font-weight:800;
+    color:white;
+    text-shadow:0 8px 25px rgba(0,0,0,.45);
+    margin:20px 0 10px;
+
+    animation:slideDown 1.2s ease;
+}
+
+.tagline{
+    font-size:22px;
+}
+
+.loader{
+    width:60px;
+    height:60px;
+    border:6px solid rgba(255,255,255,.3);
+    border-top:6px solid white;
+    border-radius:50%;
+    margin:25px auto;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes slideDown{
+
+    from{
+        opacity:0;
+        transform:translateY(-60px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}   
+.fade-out{
+    animation:fadeOut 1s forwards;
+}
+
+@keyframes fadeOut{
+
+    from{
+        opacity:1;
+    }
+
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+
+}@keyframes pop{
+
+    from{
+        transform:scale(.7);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+#languageScreen{
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#0F2027,#203A43,#2C5364);
+    color:white;
+    z-index:2200;
+    padding:25px;
+    overflow:hidden;
+}
+.langTitle{
+    margin-bottom:25px;
+    font-size:42px;
+    font-weight:700;
+    text-align:center;
+    letter-spacing:1px;
+    color:white;
+}
+.lang-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    width:90%;
+    max-width:1200px;
+}
+.lang-btn{
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.3);
+    color:white;
+    padding:18px;
+    border-radius:18px;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .35s ease;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    animation:pop .6s ease ;
+}
+.lang-btn:hover{
+    transform:translateY(-8px) scale(1.05);
+    background:white;
+    color:#0F2027;
+    box-shadow:0 20px 35px rgba(0,0,0,.35);
+}
+.lang-btn:active{
+    transform:scale(.97);
+}.lang-btn:nth-child(1){
+    animation-delay:.1s;
+}
+
+.lang-btn:nth-child(2){
+    animation-delay:.2s;
+}
+
+.lang-btn:nth-child(3){
+    animation-delay:.3s;
+}
+
+.lang-btn:nth-child(4){
+    animation-delay:.4s;
+}
+
+.lang-btn:nth-child(5){
+    animation-delay:.5s;
+}
+
+.lang-btn:nth-child(6){
+    animation-delay:.6s;
+}
+
+  #map{width:100%;height:100vh;display:none;touch-action:none}
+.controls{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+
+    width:90%;
+    max-width:1050px;
+
+    padding:18px 22px;
+
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:22px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.25);
+
+    z-index:1200;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-right:15px;
+}
+
+.brand img{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    object-fit:cover;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+
+.brand h3{
+    margin:0;
+    font-size:18px;
+    color:#0F2027;
+}
+
+.brand p{
+    margin:0;
+    font-size:12px;
+    color:#555;
+}    
+}
+ label,
+select,
+button,
+input{
+    font-size:16px;
+    font-family:'Poppins',sans-serif;
+}
+
+select,
+input{
+    padding:12px 16px;
+    border-radius:12px;
+    border:none;
+    outline:none;
+    background:white;
+    min-width:180px;
+}
+button{
+    background:linear-gradient(135deg,#0066ff,#00b4ff);
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+}button:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 25px rgba(0,123,255,.35);
+}
+button.secondary{
+    background:linear-gradient(135deg,#666,#444);
+}
+#deptBox{
+    position:absolute;
+    top:95px;
+    left:50%;
+    transform:translateX(-50%);
+
+    display:none;
+    flex-direction:column;
+    gap:12px;
+
+    width:340px;
+
+    padding:22px;
+
+    background:rgba(255,255,255,.18);
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:20px;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.25);
+
+    z-index:1500;
+
+    animation:popup .4s ease;
+}
+#deptBox h3{
+    margin:0;
+    text-align:center;
+    color:white;
+    font-size:24px;
+    font-weight:700;
+}
+.dept-btn{
+    background:linear-gradient(135deg,#0066ff,#00b4ff);
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    text-align:left;
+
+    font-weight:600;
+}
+.dept-btn:hover{
+    transform:translateX(8px);
+    box-shadow:0 10px 20px rgba(0,123,255,.35);
+}@keyframes popup{
+
+    from{
+        opacity:0;
+        transform:translate(-50%,30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+
+}
+  #messageBox{
+
+    position:absolute;
+
+    top:115px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:1600;
+
+    min-width:350px;
+
+    max-width:500px;
+
+    padding:18px 25px;
+
+    background:rgba(15,32,39,.92);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    color:white;
+
+    border-radius:18px;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.35);
+
+    display:none;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    animation:messageSlide .5s ease;
+
+}@keyframes messageSlide{
+
+    from{
+
+        opacity:0;
+
+        transform:translate(-50%,-25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translate(-50%,0);
+
+    }
+
+}
+
+  .rotate-controls{display:flex;gap:8px;align-items:center}
+  .rotate-controls button{padding:6px 8px;font-size:14px}
+  /* green marker style class */
+  .green-marker img{filter:hue-rotate(100deg) saturate(2)}
+  /* bigger clickable popup area on mobile */
+  .leaflet-popup-content-wrapper{font-size:14px}
+</style>
+</head>
+<body>
+<!-- Welcome Screen -->
+
+<div id="welcomeScreen">
+
+    <div class="overlay"></div>
+
+    <div class="welcome-content">
+
+        <img src="logo.jpg" class="logo" alt="KJEI Logo">
+
+        <h1 class="welcome-title">
+            Welcome to KJEI
+        </h1>
+
+        <p class="tagline">
+            Smart Campus Navigation System
+        </p>
+
+        <div class="loader"></div>
+
+    </div>
+
+</div>
+<!-- Language selection screen -->
+<div id="languageScreen" aria-hidden="false">
+  <h1 class="langTitle">Choose your language / अपनी भाषा चुनें / तुमची भाषा निवडा</h1>
+  <div class="lang-grid" id="languageOptions"></div>
+</div>
+
+<!-- Map -->
+<div id="map" aria-hidden="true"></div>
+
+<!-- Controls -->
+<div class="controls" id="controls" style="display:none">
+
+    <div class="brand">
+        <img src="KJEI.jpg" alt="KJEI Logo">
+        <div>
+            <h3>KJEI Navigator</h3>
+            <p>Smart Campus Navigation</p>
+        </div>
+    </div>
+
+<label id="destLabel">📍 Destination:</label>
+    <select id="destinationSelect" aria-label="Destination">
+        <!-- will be filled with places -->
+    </select>
+    
+<button id="navigateBtn">🧭 Navigate</button> 
+<button id="stopBtn" class="secondary">🛑 Stop</button>
+  <div class="rotate-controls" title="Rotate map">
+    <button id="rotateLeftBtn">⟲</button>
+    <button id="rotateResetBtn">Reset</button>
+    <button id="rotateRightBtn">⟳</button>
+  </div>
+
+  <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="autoCenter" checked> <span id="autoLabel">Auto-center</span></label>
+
+  <div id="status" aria-live="polite" style="min-width:220px">Status: Waiting for location...</div>
+</div>
+
+<!-- Department selection (appears at TCOER) -->
+<div id="deptBox" role="dialog" aria-modal="true">
+  <h3 id="deptTitle">Select Department:</h3>
+  <button class="dept-btn" data-opt="1">1. First Year Department</button>
+  <button class="dept-btn" data-opt="2">2. IT Department</button>
+  <button class="dept-btn" data-opt="3">3. ENTC Department</button>
+  <button class="dept-btn" data-opt="4">4. C.S Department</button>
+  <button class="dept-btn" data-opt="5">5. Electrical Department</button>
+  <button class="dept-btn" data-opt="6">6. M.B.A Department</button>
+  <button class="dept-btn" data-opt="7">7. Civil Department</button>
+</div>
+
+<div id="messageBox" role="status"></div>
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+<script>
+/* ============================
+   Final Campus Navigator (manual, multilingual)
+   - Preloaded campus places (user-provided)
+   - Dropdown and clickable markers to choose destination
+   - Route drawing with Leaflet Routing Machine
+   - Auto-center toggle
+   - Map rotation controls (CSS transform)
+   - TCOER proximity -> department menu (7 options)
+   - Full UI translations (24+ languages), no voice
+   ============================ */
+
+/* ---------- language data (short codes & display labels) ---------- */
+const languageList = [
+  {code:'en',label:'English'},
+  {code:'hi',label:'हिन्दी'},
+  {code:'mr',label:'मराठी'},
+  {code:'gu',label:'ગુજરાતી'},
+  {code:'bn',label:'বাংলা'},
+  {code:'ta',label:'தமிழ்'},
+  {code:'te',label:'తెలుగు'},
+  {code:'ml',label:'മലയാളം'},
+  {code:'kn',label:'ಕನ್ನಡ'},
+  {code:'pa',label:'ਪੰਜਾਬੀ'},
+  {code:'or',label:'ଓଡ଼ିଆ'},
+  {code:'as',label:'অসমীয়া'},
+  {code:'ur',label:'اردو'},
+  {code:'kok',label:'Konkani'},
+  {code:'sd',label:'Sindhi'},
+  {code:'sa',label:'Sanskrit'},
+  {code:'mni',label:'Manipuri'},
+  {code:'brx',label:'Bodo'},
+  {code:'sat',label:'Santali'},
+  {code:'ks',label:'Kashmiri'},
+  {code:'doi',label:'Dogri'},
+  {code:'mai',label:'Maithili'},
+  {code:'ne',label:'नेपाली'},
+  {code:'de',label:'Deutsch'}
+];
+
+/* ---------- translation table (T) ----------
+   For brevity most messages already included for many languages.
+   You can tweak any entry here. Each language must contain keys used in UI:
+   destLabel, navigate, stop, auto, waiting, started, stopped, denied, current, deptTitle, deptMessages{1..7}
+*/
+const T = {
+  en: {
+    destLabel:"Destination:",
+    navigate:"Navigate",
+    stop:"Stop",
+    auto:"Auto-center",
+    waiting:"Status: Waiting for location...",
+    started:"Status: Navigation started.",
+    stopped:"Status: Navigation stopped.",
+    denied:"Location access denied or unavailable.",
+    current:"Current position",
+    deptTitle:"Select Department:",
+    deptMessages:{
+      1:"Move to C building 3rd and 4th Floor",
+      2:"Move to E building 4th floor",
+      3:"Move to C building 2nd floor",
+      4:"Move to E building 3rd floor",
+      5:"Move to E building 2nd floor",
+      6:"Move to C building ground floor",
+      7:"Move to E building 1st floor"
+    }
+  },
+  // Hindi
+  hi: {
+    destLabel:"गंतव्य:",
+    navigate:"मार्गदर्शन",
+    stop:"रोकें",
+    auto:"स्वचालित केंद्र",
+    waiting:"स्थिति: स्थान की प्रतीक्षा...",
+    started:"स्थिति: नेविगेशन शुरू।",
+    stopped:"स्थिति: नेविगेशन बंद।",
+    denied:"स्थान अनुमति अस्वीकार या अनुपलब्ध।",
+    current:"वर्तमान स्थान",
+    deptTitle:"विभाग चुनें:",
+    deptMessages:{
+      1:"C इमारत के 3rd और 4th फ्लोर पर जाएँ",
+      2:"E इमारत के 4th फ्लोर पर जाएँ",
+      3:"C इमारत के 2nd फ्लोर पर जाएँ",
+      4:"E इमारत के 3rd फ्लोर पर जाएँ",
+      5:"E इमारत के 2nd फ्लोर पर जाएँ",
+      6:"C इमारत के ग्राउंड फ्लोर पर जाएँ",
+      7:"E इमारत के 1st फ्लोर पर जाएँ"
+    }
+  },
+  // Marathi
+  mr: {
+    destLabel:"गंतव्य:",
+    navigate:"मार्गदर्शन",
+    stop:"थांबा",
+    auto:"स्वतः मध्यभागी",
+    waiting:"स्थिती: स्थानाची प्रतीक्षा...",
+    started:"स्थिती: नेव्हिगेशन सुरू.",
+    stopped:"स्थिती: नेव्हिगेशन थांबले.",
+    denied:"स्थान प्रवेश नाकारला किंवा अनुपलब्ध.",
+    current:"सध्याचे स्थान",
+    deptTitle:"विभाग निवडा:",
+    deptMessages:{
+      1:"C बिल्डिंगच्या 3री आणि 4थ्या मजल्यावर जा",
+      2:"E बिल्डिंगच्या 4थ्या मजल्यावर जा",
+      3:"C बिल्डिंगच्या 2ऱ्या मजल्यावर जा",
+      4:"E बिल्डिंगच्या 3ऱ्या मजल्यावर जा",
+      5:"E बिल्डिंगच्या 2ऱ्या मजल्यावर जा",
+      6:"C बिल्डिंगच्या ग्राऊंड फ्लोरवर जा",
+      7:"E बिल्डिंगच्या 1ल्या मजल्यावर जा"
+    }
+  },
+  // Gujarati
+  gu: {
+    destLabel:"ગંતવ્ય:",
+    navigate:"માર્ગદર્શન",
+    stop:"બંધ કરો",
+    auto:"સ્વયંચલિત કેન્દ્ર",
+    waiting:"સ્થિતિ: સ્થાન માટે રાહ જોઈ રહ્યું છે...",
+    started:"સ્થિતિ: નેવિગેશન શરૂ.",
+    stopped:"સ્થિતિ: નેવિગેશન બંધ.",
+    denied:"સ્થાન ઍક્સેસ નકારવામાં આવ્યું છે અથવા ઉપલબ્ધ નથી.",
+    current:"વર્તમાન સ્થાન",
+    deptTitle:"વિભાગ પસંદ કરો:",
+    deptMessages:{
+      1:"C બિલ્ડિંગની 3 અને 4 મંજિલ પર જાઓ",
+      2:"E બિલ્ડિંગની 4 મંજિલ પર જાઓ",
+      3:"C બિલ્ડિંગની 2 મંજિલ પર જાઓ",
+      4:"E બિલ્ડિંગની 3 મંજિલ પર જાઓ",
+      5:"E બિલ્ડિંગની 2 મંજિલ પર જાઓ",
+      6:"C બિલ્ડિંગની ગ્રાઉન્ડ ફ્લોર પર જાઓ",
+      7:"E બિલ્ડિંગની 1 મંજિલ પર જાઓ"
+    }
+  },
+  // Bengali
+  bn: {
+    destLabel:"গন্তব্য:",
+    navigate:"নেভিগেট",
+    stop:"থামুন",
+    auto:"স্বয়ং-কেন্দ্র",
+    waiting:"অবস্থা: অবস্থানের জন্য অপেক্ষা...",
+    started:"অবস্থা: নেভিগেশন শুরু হয়েছে।",
+    stopped:"অবস্থা: নেভিগেশন বন্ধ।",
+    denied:"অবস্থান অ্যাক্সেস প্রত্যাখ্যান করা হয়েছে বা অনুপলব্ধ।",
+    current:"বর্তমান অবস্থান",
+    deptTitle:"বিভাগ নির্বাচন করুন:",
+    deptMessages:{
+      1:"C বিল্ডিংয়ের 3য় ও 4র্থ তলায় যান",
+      2:"E বিল্ডিংয়ের 4র্থ তলায় যান",
+      3:"C বিল্ডিংয়ের 2য় তলায় যান",
+      4:"E বিল্ডিংয়ের 3য় তলায় যান",
+      5:"E বিল্ডিংয়ের 2য় তলায় যান",
+      6:"C বিল্ডিংয়ের গ্রাউন্ড ফ্লোরে যান",
+      7:"E বিল্ডিংয়ের 1ম তলায় যান"
+    }
+  },
+  // Tamil
+  ta: {
+    destLabel:"இலக்கு:",
+    navigate:"வழிநடத்தல்",
+    stop:"நிறுத்து",
+    auto:"தானியங்கி மையம்",
+    waiting:"நிலையை: இடத்தை காத்திருக்கிறது...",
+    started:"நிலை: வழிநடத்தல் தொடங்கியது.",
+    stopped:"நிலை: வழிநடத்தல் நிறுத்தப்பட்டது.",
+    denied:"இடத்தை அணுக முடியவில்லை அல்லது மறுக்கப்பட்டது.",
+    current:"தற்போதைய இடம்",
+    deptTitle:"துறை தேர்ந்தெடு:",
+    deptMessages:{
+      1:"C கட்டிடத்தின் 3 மற்றும் 4 மாடிக்கு செல்லவும்",
+      2:"E கட்டிடத்தின் 4 மாடிக்கு செல்லவும்",
+      3:"C கட்டிடத்தின் 2வது மாடிக்கு செல்லவும்",
+      4:"E கட்டிடத்தின் 3வது மாடிக்கு செல்லவும்",
+      5:"E கட்டிடத்தின் 2வது மாடிக்கு செல்லவும்",
+      6:"C கட்டிடத்தின் நிலை தலத்திற்கு செல்லவும்",
+      7:"E கட்டிடத்தின் 1வது மாடிக்கு செல்லவும்"
+    }
+  },
+  // Telugu
+  te: {
+    destLabel:"గమ్యం:",
+    navigate:"నావిగేట్",
+    stop:"నిలిపి",
+    auto:"ఆటో-సెంటర్",
+    waiting:"స్థితి: స్థానం కోసం వేచి ఉంది...",
+    started:"స్థితి: మార్గనిర్దేశం ప్రారంభమైంది.",
+    stopped:"స్థితి: మార్గనిర్దేశం నిలిపివేయబడింది.",
+    denied:"పొజిషన్ యాక్సెస్ నిరాకరించబడింది లేదా అందుబాటులో లేదు.",
+    current:"ప్రస్తుత స్థానం",
+    deptTitle:"విభాగాన్ని ఎంచుకోండి:",
+    deptMessages:{
+      1:"C బిల్డింగ్ 3వ మరియు 4వ అంతస్తుకి వెళ్లండి",
+      2:"E బిల్డింగ్ 4వ అంతస్తుకి వెళ్లండి",
+      3:"C బిల్డింగ్ 2వ అంతస్తుకి వెళ్లండి",
+      4:"E బిల్డింగ్ 3వ అంతస్తుకి వెళ్లండి",
+      5:"E బిల్డింగ్ 2వ అంతస్తుకి వెళ్లండి",
+      6:"C బిల్డింగ్ గ్రౌండ్ ఫ్లోరుకి వెళ్లండి",
+      7:"E బిల్డింగ్ 1వ అంతస్తుకి వెళ్లండి"
+    }
+  },
+  // Malayalam
+  ml: {
+    destLabel:"ലക്ഷ്യം:",
+    navigate:"നാവിഗേറ്റ് ചെയ്യുക",
+    stop:"നിർത്തുക",
+    auto:"ഓട്ടോ-സെന്റർ",
+    waiting:"സ്ഥിതി: സ്ഥലം കാത്തിരിക്കുന്നു...",
+    started:"സ്ഥിതി: നാവിഗേഷൻ ആരംഭിച്ചു.",
+    stopped:"സ്ഥിതി: നാവിഗേഷൻ അവസാനിച്ചു.",
+    denied:"സ്ഥാനം ലഭ്യമല്ല അല്ലെങ്കിൽ അസ്വീകരിച്ചിട്ടുണ്ട്.",
+    current:"നിലവിലെ സ്ഥാനം",
+    deptTitle:"വിഭാഗം തിരഞ്ഞെടുക്കുക:",
+    deptMessages:{
+      1:"C ബിൽഡിങിന്റെ 3ആം & 4ആം നിലകളിലേക്ക് പോകുക",
+      2:"E ബിൽഡിങിന്റെ 4ആം നിലയ്ക്കു പോകുക",
+      3:"C ബിൽഡിങിന്റെ 2ആം നിലയ്ക്ക് പോവുക",
+      4:"E ബിൽഡിങിന്റെ 3ആം നിലയ്ക്ക് പോവുക",
+      5:"E ബിൽഡിങിന്റെ 2ആം നിലയ്ക്ക് പോവുക",
+      6:"C ബിൽഡിങിന്റെ ഗ്രൗണ്ട് നിലയ്ക്ക് പോവുക",
+      7:"E ബിൽഡിങിന്റെ 1ആം നിലയ്ക്ക് പോവുക"
+    }
+  },
+  // Kannada
+  kn: {
+    destLabel:"ಗಮ್ಯಸ್ಥಾನ:",
+    navigate:"ನೆವಿಗೇಟ್ ಮಾಡಿ",
+    stop:"ನಿಲ್ಲಿಸಿ",
+    auto:"ಸ್ವಯಂಚಾಲಿತ ಕೇಂದ್ರ",
+    waiting:"ಸ್ಥಿತಿ: ಸ್ಥಳದಿಗಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ...",
+    started:"ಸ್ಥಿತಿ: ನಾವಿಗೇಶನ್ ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ.",
+    stopped:"ಸ್ಥಿತಿ: ನಾವಿಗೇಶನ್ ನಿಂತಿದೆ.",
+    denied:"ಸ್ಥಳದ ಪ್ರವೇಶ ನಿರಾಕರಿಸಲಾಗಿದೆ ಅಥವಾ ಲಭ್ಯವಿಲ್ಲ.",
+    current:"ಪ್ರಸ್ತುತ ಸ್ಥಾನ",
+    deptTitle:"ವಿಭಾಗ ಆಯ್ಕೆಮಾಡಿ:",
+    deptMessages:{
+      1:"C ಕಟ್ಟಡದ 3ನೇ ಮತ್ತು 4ನೇ ಮಹಡಿಗೆ ಹೋಗಿ",
+      2:"E ಕಟ್ಟಡದ 4ನೇ ಮಹಡಿಗೆ ಹೋಗಿ",
+      3:"C ಕಟ್ಟಡದ 2ನೇ ಮಹಡಿಗೆ ಹೋಗಿ",
+      4:"E ಕಟ್ಟಡದ 3ನೇ ಮಹಡಿಗೆ ಹೋಗಿ",
+      5:"E ಕಟ್ಟಡದ 2ನೇ ಮಹಡಿಗೆ ಹೋಗಿ",
+      6:"C ಕಟ್ಟಡದ ನೆಲಮಾಳಿಗೆ ಹೋಗಿ",
+      7:"E ಕಟ್ಟಡದ 1ನೇ ಮಹಡಿಗೆ ಹೋಗಿ"
+    }
+  },
+  // Punjabi
+  pa: {
+    destLabel:"ਮੰਜ਼ਿਲ:",
+    navigate:"ਨੇਵੀਗੇਟ ਕਰੋ",
+    stop:"ਰੋਕੋ",
+    auto:"ਆਟੋ-ਸੈਂਟਰ",
+    waiting:"ਸਤਿਤੀ: ਟਿਕਾਣੇ ਦੀ ਉਡੀਕ...",
+    started:"ਸਤਿਤੀ: ਨੈਵੀਗੇਸ਼ਨ ਸ਼ੁਰੂ ਹੋਇਆ।",
+    stopped:"ਸਤਿਤੀ: ਨੈਵੀਗੇਸ਼ਨ ਰੁਕ ਗਿਆ।",
+    denied:"ਟਿਕਾਣੇ ਦੀ ਪਹੁੰਚ ਅਸਵੀਕਾਰ ਕੀਤੀ ਗਈ।",
+    current:"ਤੁਸੀਂ ਇੱਥੇ ਹੋ",
+    deptTitle:"ਵਿਭਾਗ ਚੁਣੋ:",
+    deptMessages:{
+      1:"C ਬਿਲਡਿੰਗ ਦੇ 3rd ਅਤੇ 4th ਮੰਜ਼ਿਲ ਵੱਲ ਜਾਓ",
+      2:"E ਬਿਲਡਿੰਗ ਦੀ 4th ਮੰਜ਼ਿਲ ਵੱਲ ਜਾਓ",
+      3:"C ਬਿਲਡਿੰਗ ਦੀ 2nd ਮੰਜ਼ਿਲ ਵੱਲ ਜਾਓ",
+      4:"E ਬਿਲਡਿੰਗ ਦੀ 3rd ਮੰਜ਼ਿਲ ਵੱਲ ਜਾਓ",
+      5:"E ਬਿਲਡਿੰਗ ਦੀ 2nd ਮੰਜ਼ਿਲ ਵੱਲ ਜਾਓ",
+      6:"C ਬਿਲਡਿੰਗ ਦੇ ਗਰਾਊਂਡ ਫਲੋਰ ਵੱਲ ਜਾਓ",
+      7:"E ਬਿਲਡਿੰਗ ਦੀ 1st ਮੰਜ਼ਿਲ ਵੱਲ ਜਾਓ"
+    }
+  },
+  // Odia
+  or: {
+    destLabel:"ଗନ୍ତବ୍ୟ:",
+    navigate:"ନାଭିଗେଟ",
+    stop:"ରୋକନ୍ତୁ",
+    auto:"ଆଟୋ-ସେଣ୍ଟର",
+    waiting:"ସ୍ଥିତି: ସ୍ଥାନ ପାଇଁ ପ୍ରତୀକ୍ଷା...",
+    started:"ସ୍ଥିତି: ନାଭିଗେସନ ଆରମ୍ଭ।",
+    stopped:"ସ୍ଥିତି: ନାଭିଗେସନ ବନ୍ଦ।",
+    denied:"ସ୍ଥାନ ପ୍ରବେଶ ପ୍ରତ୍ୟାଖ୍ୟାନ କରାଗଲା କିମ୍ବା ଅପଲବ୍ଧ ନୁହେଁ।",
+    current:"ବର୍ତ୍ତମାନ ସ୍ଥାନ",
+    deptTitle:"ବିଭାଗ ପସନ୍ଦ କରନ୍ତୁ:",
+    deptMessages:{
+      1:"C ବିଲ୍ଡିଙ୍ଗର 3ତମ ଏବଂ 4ତମ ତଳକୁ ଯାଆନ୍ତୁ",
+      2:"E ବିଲ୍ଡିଙ୍ଗର 4ତମ ତଳକୁ ଯାଆନ୍ତୁ",
+      3:"C ବିଲ୍ଡିଙ୍ଗର 2ୟ ତଳକୁ ଯାଆନ୍ତୁ",
+      4:"E ବିଲ୍ଡିଙ୍ଗର 3ୟ ତଳକୁ ଯାଆନ୍ତୁ",
+      5:"E ବିଲ୍ଡିଙ୍ଗର 2ୟ ତଳକୁ ଯାଆନ୍ତୁ",
+      6:"C ବିଲ୍ଡିଙ୍ଗର ଭୂମିତଳକୁ ଯାଆନ୍ତୁ",
+      7:"E ବିଲ୍ଡିଙ୍ଗର 1ମ ତଳକୁ ଯାଆନ୍ତୁ"
+    }
+  },
+  // Assamese
+  as: {
+    destLabel:"গন্তব্য:",
+    navigate:"নেভিগেট",
+    stop:"বন্ধ কৰক",
+    auto:"অটো-মধ্য",
+    waiting:"অৱস্থা: স্থানৰ বাবে অপেক্ষা কৰা হৈছে...",
+    started:"অৱস্থা: নেভিগেশ্বন আৰম্ভ হৈছে।",
+    stopped:"অৱস্থা: নেভিগেশ্বন বন্ধ কৰা হৈছে।",
+    denied:"অৱস্থান অ্যাক্সেছ নাকচ কৰা হৈছে বা উপলব্ধ নহয়।",
+    current:"বৰ্তমান অৱস্থান",
+    deptTitle:"বিভাগ বাছনি কৰক:",
+    deptMessages:{
+      1:"C বিল্ডিঙৰ 3য় আৰু 4র্থ তললৈ যাওক",
+      2:"E বিল্ডিঙৰ 4র্থ তললৈ যাওক",
+      3:"C বিল্ডিঙৰ 2য় তললৈ যাওক",
+      4:"E বিল্ডিঙৰ 3য় তললৈ যাওক",
+      5:"E বিল্ডিঙৰ 2য় তললৈ যাওক",
+      6:"C বিল্ডিঙৰ গ্ৰাউণ্ড ফ্লোৰলৈ যাওক",
+      7:"E বিল্ডিঙৰ 1ম তললৈ যাওক"
+    }
+  },
+  // Urdu
+  ur: {
+    destLabel:"منزل:",
+    navigate:"راستہ دکھائیں",
+    stop:"روکیں",
+    auto:"خودکار مرکز",
+    waiting:"حالت: مقام کا انتظار ہو رہا ہے...",
+    started:"حالت: نیویگیشن شروع ہوگئی ہے۔",
+    stopped:"حالت: نیویگیشن بند کردی گئی ہے۔",
+    denied:"مقام کی رسائی مسترد یا دستیاب نہیں۔",
+    current:"موجودہ مقام",
+    deptTitle:"شعبہ منتخب کریں:",
+    deptMessages:{
+      1:"C عمارت کی 3rd اور 4th منزل پر جائیں",
+      2:"E عمارت کی 4th منزل پر جائیں",
+      3:"C عمارت کی 2nd منزل پر جائیں",
+      4:"E عمارت کی 3rd منزل پر جائیں",
+      5:"E عمارت کی 2nd منزل پر جائیں",
+      6:"C عمارت کی گراؤنڈ فلور پر جائیں",
+      7:"E عمارت کی 1st منزل پر جائیں"
+    }
+  },
+  // Konkani (simple)
+  kok: {
+    destLabel:"Destination:",
+    navigate:"Navigate",
+    stop:"Stop",
+    auto:"Auto-center",
+    waiting:"Waiting for location...",
+    started:"Navigation started.",
+    stopped:"Navigation stopped.",
+    denied:"Location access denied.",
+    current:"You are here",
+    deptTitle:"Select Department:",
+    deptMessages:{
+      1:"Move to C building 3rd and 4th Floor",
+      2:"Move to E building 4th floor",
+      3:"Move to C building 2nd floor",
+      4:"Move to E building 3rd floor",
+      5:"Move to E building 2nd floor",
+      6:"Move to C building ground floor",
+      7:"Move to E building 1st floor"
+    }
+  },
+  // Sindhi (simple)
+  sd: {
+    destLabel:"منزل:",
+    navigate:"رستو ڪريو",
+    stop:"روڪيو",
+    auto:"خودمرڪز",
+    waiting:"جڳھه لاءِ انتظار...",
+    started:"نيواگيشن شروع ٿي چڪي آهي.",
+    stopped:"نيواگيشن بند ٿي وئي.",
+    denied:"جڳھه جي رسائي رد ڪئي وئي.",
+    current:"توهان هتي آهيو",
+    deptTitle:"شاخ چونڊيو:",
+    deptMessages:{
+      1:"C عمارت جي 3 ۽ 4 منزل ڏانهن وڃو",
+      2:"E عمارت جي 4ٿ منزل ڏانهن وڃو",
+      3:"C عمارت جي 2هين منزل ڏانهن وڃو",
+      4:"E عمارت جي 3هين منزل ڏانهن وڃو",
+      5:"E عمارت جي 2هين منزل ڏانهن وڃو",
+      6:"C عمارت جي گرائونڊ فلور ڏانهن وڃو",
+      7:"E عمارت جي 1هين منزل ڏانهن وڃو"
+    }
+  },
+  // Sanskrit (limited)
+  sa:{
+    destLabel:"लक्ष्य:",
+    navigate:"निशितुम्",
+    stop:"रुध्यताम्",
+    auto:"स्व-केंद्र",
+    waiting:"स्थिति: स्थान प्रतीक्षते...",
+    started:"स्थिति: मार्गदर्शन आरभत।",
+    stopped:"स्थिति: मार्गदर्शन समाप्यताम्।",
+    denied:"स्थान प्रवेश नास्ति अथवा न प्राप्तव्यं।",
+    current:"वर्तमान स्थिति",
+    deptTitle:"विभाग चयन:",
+    deptMessages:{
+      1:"C-भवनस्य तृतीयं च चतुर्थं तलानि यान्तु",
+      2:"E-भवनस्य चतुर्थं तलम् यान्तु",
+      3:"C-भवनस्य द्वितीयं तलम् यान्तु",
+      4:"E-भवनस्य तृतीयं तलम् यान्तु",
+      5:"E-भवनस्य द्वितीयं तलम् यान्तु",
+      6:"C-भवनस्य भूतलम् यान्तु",
+      7:"E-भवनस्य प्रथमं तलम् यान्तु"
+    }
+  },
+  // Manipuri (fallback English)
+  mni:{...TBD_FALLBACK()},
+  brx:{...TBD_FALLBACK()},
+  sat:{...TBD_FALLBACK()},
+  ks:{...TBD_FALLBACK()},
+  doi:{...TBD_FALLBACK()},
+  mai:{...TBD_FALLBACK()},
+  ne:{...TBD_FALLBACK()},
+  de:{
+    destLabel:"Ziel:",
+    navigate:"Navigieren",
+    stop:"Stopp",
+    auto:"Auto-Zentrieren",
+    waiting:"Status: Warte auf Standort...",
+    started:"Status: Navigation gestartet.",
+    stopped:"Status: Navigation gestoppt.",
+    denied:"Standortzugriff verweigert oder nicht verfügbar.",
+    current:"Aktuelle Position",
+    deptTitle:"Abteilung wählen:",
+    deptMessages:{
+      1:"Gehen Sie zum Gebäude C, 3. und 4. Stock",
+      2:"Gehen Sie zum Gebäude E, 4. Stock",
+      3:"Gehen Sie zum Gebäude C, 2. Stock",
+      4:"Gehen Sie zum Gebäude E, 3. Stock",
+      5:"Gehen Sie zum Gebäude E, 2. Stock",
+      6:"Gehen Sie zum Gebäude C, Erdgeschoss",
+      7:"Gehen Sie zum Gebäude E, 1. Stock"
+    }
+  }
+};
+
+/* Utility function: provide simple english fallback for many smaller codes quickly */
+function TBD_FALLBACK(){
+  return {
+    destLabel:"Destination:",
+    navigate:"Navigate", stop:"Stop", auto:"Auto-center",
+    waiting:"Waiting for location...", started:"Navigation started.",
+    stopped:"Navigation stopped.", denied:"Location access denied.", current:"You are here",
+    deptTitle:"Select Department:",
+    deptMessages:{
+      1:"Move to C building 3rd and 4th Floor",
+      2:"Move to E building 4th floor",
+      3:"Move to C building 2nd floor",
+      4:"Move to E building 3rd floor",
+      5:"Move to E building 2nd floor",
+      6:"Move to C building ground floor",
+      7:"Move to E building 1st floor"
+    }
+  }
+}
+
+// Ensure fallback languages exist in T
+['mni','brx','sat','ks','doi','mai','ne'].forEach(code => { if(!T[code]) T[code] = TBD_FALLBACK(); });
+
+/* ---------- Campus places (user provided + main ones) ---------- */
+const PLACES = [
+  { id:'tcoer', name:'TCOER(Trinity college of Engineering and Research(AUTONOMOUS INSTITUTE))', coords:[18.421541,73.905922] },
+  { id:'tae', name:'TAE (Trinity Academy of Engineering)', coords:[18.421800,73.905700] },
+  { id:'management', name:'Kj college of Management Research Engineering', coords:[18.421600,73.904900] },
+
+  // user-provided full list
+  { id:'trinity_school', name:"Trinity International School", coords:[18.4203341,73.9044704] },
+  { id:'swimming_pool', name:"Swimming Pool", coords:[18.422132,73.904171] },
+  { id:'turf', name:"Turf", coords:[18.423326,73.905940] },
+  { id:'pharmacy', name:"Pharmacy College", coords:[18.421304,73.907801] },
+  { id:'law', name:"Law College", coords:[18.421459,73.907606] },
+  { id:'campus_gate', name:"Campus Main Gate", coords:[18.423238,73.902379] },
+  { id:'hostel', name:"Hostel", coords:[18.4232272,73.9032621] },
+  { id:'basketball', name:"Basketball Court", coords:[18.422745,73.906447] },
+  { id:'cricket', name:"Cricket Ground", coords:[18.422966,73.904883] },
+  { id:'mais_canteen', name:"Mai's Canteen", coords:[18.4229835,73.9038578] },
+  { id:'main_parking', name:"Main Parking", coords:[18.421481,73.904531] },
+  { id:'second_parking', name:"Second Parking", coords:[18.421684,73.906165] },
+  { id:'architecture', name:"Architecture College", coords:[18.421609,73.907558] },
+  { id:'anna_canteen', name:"Anna Canteen", coords:[18.421899,73.904035] },
+  { id:'stationary', name:"Campus Stationery", coords:[18.421481,73.904531] }, // same as main parking per user
+  { id:'cafe', name:"Cafe", coords:[18.4236875,73.9032781] },
+  { id:'canteen', name:"KJ Canteen", coords:[18.421411,73.906255] },
+  { id:'management2', name:"TIMR", coords:[18.421219,73.906921] } // optional duplicates
+];
+
+/* ---------- App state ---------- */
+let selectedLang = 'en';
+let mapInstance = null;
+let markers = {}; // id -> marker
+let startMarker = null;
+let destMarker = null;
+let routingControl = null;
+let watchId = null;
+let currentRotation = 0; // degrees
+const TCOER_COORDS = [18.421541,73.905922];
+const REACH_RADIUS_METERS = 100; // show dept box when inside ~25 m
+
+/* ---------- build language buttons ---------- */
+const langContainer = document.getElementById('languageOptions');
+languageList.forEach(l => {
+  const btn = document.createElement('button');
+  btn.className = 'lang-btn';
+  btn.textContent = l.label;
+  btn.onclick = () => chooseLanguage(l.code);
+  langContainer.appendChild(btn);
+});
+
+/* ---------- choose language, initialize UI ---------- */
+function chooseLanguage(code){
+  if(!T[code]) code = 'en';
+  selectedLang = code;
+
+  document.getElementById('languageScreen').style.display = 'none';
+  document.getElementById('map').style.display = 'block';
+  document.getElementById('controls').style.display = 'flex';
+
+  initMapAndUI();
+  applyTranslations();
+}
+
+/* ---------- apply translations ---------- */
+function applyTranslations(){
+  const tr = T[selectedLang] || T.en;
+  document.getElementById('destLabel').textContent = tr.destLabel;
+  document.getElementById('navigateBtn').textContent = tr.navigate;
+  document.getElementById('stopBtn').textContent = tr.stop;
+  document.getElementById('autoLabel').textContent = tr.auto;
+  document.getElementById('status').textContent = tr.waiting;
+  document.getElementById('deptTitle').textContent = tr.deptTitle;
+
+  // update dept buttons (labels remain english names with numbers)
+  const deptButtons = document.querySelectorAll('#deptBox .dept-btn');
+  const namesEN = ["1. First Year Department","2. IT Department","3. ENTC Department","4. C.S Department","5. Electrical Department","6. M.B.A Department","7. Civil Department"];
+  deptButtons.forEach((b,i)=> b.textContent = namesEN[i]);
+
+  // fill destination dropdown with places (clear then add)
+  const sel = document.getElementById('destinationSelect');
+  sel.innerHTML = '';
+  PLACES.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = `${p.coords[0]},${p.coords[1]}`;
+    opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+}
+
+/* ---------- create map, markers, tracking ---------- */
+function initMapAndUI(){
+  if(mapInstance) return; // already initialized
+
+  // init map
+  mapInstance = L.map('map', { zoomControl:true }).setView([18.4223,73.9055], 17);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:'© OpenStreetMap contributors'
+  }).addTo(mapInstance);
+
+  // icons
+  const baseIconUrl = 'https://cdn-icons-png.flaticon.com/512/684/684908.png';
+  const startIcon = L.icon({ iconUrl: baseIconUrl, iconSize:[40,40], iconAnchor:[20,40] });
+  const destIcon = L.icon({ iconUrl: baseIconUrl, iconSize:[40,40], iconAnchor:[20,40], className:'green-marker' });
+
+  // add markers for all PLACES
+  PLACES.forEach(place=>{
+    const m = L.marker(place.coords, { title: place.name, alt: place.name, riseOnHover:true }).addTo(mapInstance);
+    m.bindPopup(`<strong>${escapeHtml(place.name)}</strong><br><button onclick="onMarkerNavigate('${place.coords[0]},${place.coords[1]}')">Go to this place</button>`);
+    m.on('click', ()=> {
+      // open popup (already happens) - nothing else
+    });
+    markers[place.id] = m;
+  });
+
+  // allow clicking on map to set destination
+  mapInstance.on('click', function(e){
+    const lat = e.latlng.lat, lng = e.latlng.lng;
+    // set destination marker & route
+    setDestination([lat,lng], "Custom point");
+  });
+
+  // rotate controls
+  document.getElementById('rotateLeftBtn').addEventListener('click', ()=> rotateMap(-15));
+  document.getElementById('rotateRightBtn').addEventListener('click', ()=> rotateMap(15));
+  document.getElementById('rotateResetBtn').addEventListener('click', ()=> rotateMap(0,true));
+
+  // navigation buttons
+  document.getElementById('navigateBtn').addEventListener('click', ()=>{
+    const val = document.getElementById('destinationSelect').value.split(',').map(Number);
+    if(!startMarker){ alert(T[selectedLang].waiting); return; }
+    setDestination(val, document.getElementById('destinationSelect').selectedOptions[0].text);
+  });
+
+  document.getElementById('stopBtn').addEventListener('click', ()=> {
+    stopNavigation();
+  });
+
+  // dept buttons
+  document.querySelectorAll('#deptBox .dept-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const opt = Number(btn.dataset.opt);
+      const msg = (T[selectedLang] && T[selectedLang].deptMessages && T[selectedLang].deptMessages[opt]) ? T[selectedLang].deptMessages[opt] : T.en.deptMessages[opt];
+      showMessage(msg);
+    });
+  });
+
+  // start geolocation tracking
+  startTracking();
+}
+
+/* ---------- marker "Go to this place" handler used inside popup (global) ---------- */
+function onMarkerNavigate(latlngStr){
+  const arr = latlngStr.split(',').map(Number);
+  setDestination(arr, 'Selected place');
+}
+
+/* ---------- setDestination: placeCoords is [lat,lng] ---------- */
+function setDestination(placeCoords, placeName){
+  const destLat = placeCoords[0], destLng = placeCoords[1];
+
+  // place dest marker
+  if(destMarker) mapInstance.removeLayer(destMarker);
+  const destIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize:[40,40], iconAnchor:[20,40], className:'green-marker' });
+  destMarker = L.marker([destLat,destLng], { icon: destIcon }).addTo(mapInstance).bindPopup(`<strong>${escapeHtml(placeName)}</strong>`).openPopup();
+
+  // draw route from current start to dest
+  if(!startMarker){
+    alert( T[selectedLang].waiting );
+    return;
+  }
+  const startLatLng = startMarker.getLatLng();
+  if(routingControl) mapInstance.removeControl(routingControl);
+
+  routingControl = L.Routing.control({
+    waypoints: [ startLatLng, L.latLng(destLat,destLng) ],
+    routeWhileDragging: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true,
+    showAlternatives:false,
+    lineOptions: { styles: [{ color: '#0066ff', weight:6, opacity:0.9 }] }
+  }).addTo(mapInstance);
+
+  document.getElementById('status').textContent = T[selectedLang].started;
+}
+
+/* ---------- stop navigation ---------- */
+function stopNavigation(){
+  if(watchId) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+  if(routingControl){ mapInstance.removeControl(routingControl); routingControl = null; }
+  if(destMarker){ mapInstance.removeLayer(destMarker); destMarker = null; }
+  document.getElementById('status').textContent = T[selectedLang].stopped;
+}
+
+/* ---------- start tracking, add start marker ---------- */
+function startTracking(){
+  if(!navigator.geolocation){
+    alert('Geolocation unsupported');
+    return;
+  }
+  function onPos(pos){
+    const lat = pos.coords.latitude, lng = pos.coords.longitude;
+    if(!startMarker){
+      const startIcon = L.icon({ iconUrl:'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize:[40,40], iconAnchor:[20,40] });
+      startMarker = L.marker([lat,lng], { icon:startIcon }).addTo(mapInstance).bindPopup(T[selectedLang].current).openPopup();
+      // center map first time
+      mapInstance.setView([lat,lng], 17);
+    } else {
+      startMarker.setLatLng([lat,lng]);
+    }
+
+    if(document.getElementById('autoCenter').checked){
+      mapInstance.panTo([lat,lng]);
+    }
+
+    document.getElementById('status').textContent = `${T[selectedLang].current}: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+
+    // check proximity to TCOER to show department box
+    const d = haversineMeters(lat,lng, TCOER_COORDS[0], TCOER_COORDS[1]);
+    if (d <= REACH_RADIUS_METERS) { // Corrected from 'dist' to 'd'
+        deptBox.style.display = 'flex';
+        showMessage("You have reached TCOER! Please select your department.");
+    } else {
+        deptBox.style.display = 'none';
+    }
+
+}
+
+
+
+  function onErr(e){
+    document.getElementById('status').textContent = T[selectedLang].denied;
+    alert(T[selectedLang].denied);
+  }
+
+  watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy:true, maximumAge:0, timeout:20000 });
+}
+
+/* ---------- rotation helpers (applies CSS transform to map container) ---------- */
+function rotateMap(deltaDegrees, reset=false){
+  if(reset) currentRotation = 0;
+  else currentRotation = (currentRotation + deltaDegrees) % 360;
+  const mapEl = document.getElementById('map');
+  // apply rotation transform; keep transform-origin center
+  mapEl.style.transformOrigin = '50% 50%';
+  mapEl.style.transition = 'transform 0.25s linear';
+  mapEl.style.transform = `rotate(${currentRotation}deg)`;
+  // need to rotate map internals back so controls/tiles align — best-effort: rotate map container only;
+  // Note: rotating Leaflet map like this is a visual rotation. For more advanced rotation (bearing) use plugins.
+}
+
+/* ---------- showMessage for dept instructions ---------- */
+function showMessage(msg){
+    const box = document.getElementById('messageBox');
+
+    box.textContent = msg;
+    box.style.display = 'block';
+    box.style.opacity = '1';
+
+    setTimeout(() => {
+        box.style.opacity = '0';
+
+        setTimeout(() => {
+            box.style.display = 'none';
+            box.style.opacity = '1';
+        }, 400);
+
+    }, 5000);
+}
+
+/* ---------- simple Haversine to compute meters ---------- */
+function haversineMeters(lat1,lon1,lat2,lon2){
+  const R = 6371000;
+  const φ1 = lat1 * Math.PI/180;
+  const φ2 = lat2 * Math.PI/180;
+  const Δφ = (lat2-lat1) * Math.PI/180;
+  const Δλ = (lon2-lon1) * Math.PI/180;
+  const a = Math.sin(Δφ/2)*Math.sin(Δφ/2) + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)*Math.sin(Δλ/2);
+  const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R*c;
+}
+
+/* ---------- small utility: escape HTML for popup titles ---------- */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
+}
+
+/* ---------- initial default: populate UI translations for default language en ---------- */
+applyTranslations();
+
+window.onload = function () {
+
+    setTimeout(function () {
+
+        const welcome = document.getElementById("welcomeScreen");
+
+        welcome.classList.add("fade-out");
+
+        setTimeout(function () {
+
+            welcome.style.display = "none";
+            document.getElementById("languageScreen").style.display = "flex";
+
+        }, 1000);
+
+    }, 4000);
+
+};
+
+
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
