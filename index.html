@@ -1726,6 +1726,9 @@ document.getElementById("detailsNextBtn").onclick=function(){
         return;
     }
 
+    localStorage.setItem("userName", userName);
+    localStorage.setItem("userPhone", userPhone);
+
     document.getElementById("detailsScreen").style.display="none";
 
     showLocationScreen();

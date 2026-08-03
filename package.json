@@ -1,0 +1,24 @@
+{
+  "name": "kjei-campus-navigation-system",
+  "version": "1.0.0",
+  "description": "A professional Smart Campus Navigation System developed for KJ's Educational Institute, Pune.",
+  "main": "serves.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikam4414/KJEI-Campus-Navigation-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nikam4414/KJEI-Campus-Navigation-System/issues"
+  },
+  "homepage": "https://github.com/nikam4414/KJEI-Campus-Navigation-System#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
