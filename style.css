@@ -16,6 +16,10 @@ p {
 
 #map {
     border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    background: #0f2027;
+    will-change: transform;
 }
 
 

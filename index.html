@@ -4,10 +4,6 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Trinity Campus Navigator — Manual Multilingual</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
-
 <style>
 html,body{
     height:100%;
@@ -197,240 +193,7 @@ html,body{
     animation-delay:.6s;
 }
 
-  #map{width:100%;height:100vh;display:none;touch-action:none}
-.controls{
-    position:absolute;
-    top:20px;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:center;
-    gap:15px;
-
-    width:90%;
-    max-width:1050px;
-
-    padding:18px 22px;
-
-    background:rgba(255,255,255,0.18);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,.25);
-
-    border-radius:22px;
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.25);
-
-    z-index:1200;
-.brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-right:15px;
-}
-
-.brand img{
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    object-fit:cover;
-    box-shadow:0 8px 20px rgba(0,0,0,.25);
-}
-
-.brand h3{
-    margin:0;
-    font-size:18px;
-    color:#0F2027;
-}
-
-.brand p{
-    margin:0;
-    font-size:12px;
-    color:#555;
-}    
-}
- label,
-select,
-button,
-input{
-    font-size:16px;
-    font-family:'Poppins',sans-serif;
-}
-
-select,
-input{
-    padding:12px 16px;
-    border-radius:12px;
-    border:none;
-    outline:none;
-    background:white;
-    min-width:180px;
-}
-button{
-    background:linear-gradient(135deg,#0066ff,#00b4ff);
-    color:white;
-    border:none;
-    padding:12px 22px;
-    border-radius:12px;
-    cursor:pointer;
-    transition:.3s;
-    font-weight:600;
-}button:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 25px rgba(0,123,255,.35);
-}
-button.secondary{
-    background:linear-gradient(135deg,#666,#444);
-}
-#deptBox{
-    position:absolute;
-    top:95px;
-    left:50%;
-    transform:translateX(-50%);
-
-    display:none;
-    flex-direction:column;
-    gap:12px;
-
-    width:340px;
-
-    padding:22px;
-
-    background:rgba(255,255,255,.18);
-    backdrop-filter:blur(18px);
-
-    border:1px solid rgba(255,255,255,.25);
-
-    border-radius:20px;
-
-    box-shadow:0 20px 45px rgba(0,0,0,.25);
-
-    z-index:1500;
-
-    animation:popup .4s ease;
-}
-#deptBox h3{
-    margin:0;
-    text-align:center;
-    color:white;
-    font-size:24px;
-    font-weight:700;
-}
-.dept-btn{
-    background:linear-gradient(135deg,#0066ff,#00b4ff);
-    color:white;
-
-    border:none;
-
-    border-radius:12px;
-
-    padding:14px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-    text-align:left;
-
-    font-weight:600;
-}
-.dept-btn:hover{
-    transform:translateX(8px);
-    box-shadow:0 10px 20px rgba(0,123,255,.35);
-}@keyframes popup{
-
-    from{
-        opacity:0;
-        transform:translate(-50%,30px);
-    }
-
-    to{
-        opacity:1;
-        transform:translate(-50%,0);
-    }
-
-}
-  #messageBox{
-
-    position:absolute;
-
-    top:115px;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    z-index:1600;
-
-    min-width:350px;
-
-    max-width:500px;
-
-    padding:18px 25px;
-
-    background:rgba(15,32,39,.92);
-
-    backdrop-filter:blur(18px);
-
-    border:1px solid rgba(255,255,255,.2);
-
-    color:white;
-
-    border-radius:18px;
-
-    box-shadow:0 20px 45px rgba(0,0,0,.35);
-
-    display:none;
-
-    text-align:center;
-
-    font-size:18px;
-
-    font-weight:600;
-
-    animation:messageSlide .5s ease;
-
-}@keyframes messageSlide{
-
-    from{
-
-        opacity:0;
-
-        transform:translate(-50%,-25px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translate(-50%,0);
-
-    }
-
-}
-
-  .rotate-controls{display:flex;gap:8px;align-items:center}
-  .rotate-controls button{padding:6px 8px;font-size:14px}
-  /* green marker style class */
-  .green-marker img{filter:hue-rotate(100deg) saturate(2)}
-  /* bigger clickable popup area on mobile */
-  .leaflet-popup-content-wrapper{font-size:14px}
-
   /* ================= LOCATION SELECTION PAGE ================= */
-
-#locationScreen{
-    position:fixed;
-    inset:0;
-    background:linear-gradient(135deg,#0F2027,#203A43,#2C5364);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:2100;
-    padding:30px;
-}
 
 
 .location-container{
@@ -661,13 +424,16 @@ Continue
 
 </div>
 
-<div id="locationScreen">
+<div id="locationScreen" style="display:none;">
 
     <div class="location-container">
 
         <div class="location-header">
-            <h1>Select your destination</h1>
-            <p>Choose a campus location to start navigation</p>
+           <h1 id="locationTitle">Select your destination</h1>
+
+<p id="locationSubtitle">
+Choose a campus location to start navigation
+</p>
         </div>
 
         <div id="locationList" class="location-grid">
@@ -678,64 +444,18 @@ Continue
 </div>
 
 <!-- Map -->
-<div id="map" aria-hidden="true"></div>
 
-<!-- Controls -->
-<div class="controls" id="controls" style="display:none">
-
-    <div class="brand">
-        <img src="KJEI.jpg" alt="KJEI Logo">
-        <div>
-            <h3>KJEI Navigator</h3>
-            <p>Smart Campus Navigation</p>
-        </div>
-    </div>
-
-<label id="destLabel">📍 Destination:</label>
-    <select id="destinationSelect" aria-label="Destination">
-        <!-- will be filled with places -->
-    </select>
-    
-<button id="navigateBtn">🧭 Navigate</button> 
-<button id="stopBtn" class="secondary">🛑 Stop</button>
-  <div class="rotate-controls" title="Rotate map">
-    <button id="rotateLeftBtn">⟲</button>
-    <button id="rotateResetBtn">Reset</button>
-    <button id="rotateRightBtn">⟳</button>
-  </div>
-
-  <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="autoCenter" checked> <span id="autoLabel">Auto-center</span></label>
-
-  <div id="status" aria-live="polite" style="min-width:220px">Status: Waiting for location...</div>
-</div>
 
 <!-- Department selection (appears at TCOER) -->
-<div id="deptBox" style="display:none;">
-    <label id="deptTitle" for="deptSelect">
-    <b>Select Department</b>
-</label><br>
 
-    <select id="deptSelect">
-        <option value="">-- Select Department --</option>
-    </select>
-
-    <br><br>
-
-    <button id="deptGoBtn">Continue</button>
-</div>
-
-<div id="messageBox" role="status"></div>
 
 <!-- Leaflet -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
 <script>
 /* ============================
    Final Campus Navigator (manual, multilingual)
    - Preloaded campus places (user-provided)
    - Dropdown and clickable markers to choose destination
-   - Route drawing with Leaflet Routing Machine
    - Auto-center toggle
    - Map rotation controls (CSS transform)
    - TCOER proximity -> department menu (7 options)
@@ -777,6 +497,7 @@ const languageList = [
 */
 const T = {
   en: {
+    
     destLabel:"Destination:",
     navigate:"Navigate",
     stop:"Stop",
@@ -795,6 +516,7 @@ const T = {
       5:"Move to E building 2nd floor",
       6:"Move to C building ground floor",
       7:"Move to E building 1st floor"
+      
     }
   },
   // Hindi
@@ -840,6 +562,7 @@ const T = {
       6:"C बिल्डिंगच्या ग्राऊंड फ्लोरवर जा",
       7:"E बिल्डिंगच्या 1ल्या मजल्यावर जा"
     }
+    
   },
   // Gujarati
   gu: {
@@ -1188,56 +911,56 @@ const PLACES = [
     id:'tcoer',
     name:'TCOER (Trinity College of Engineering and Research)',
     coords:[18.421541,73.905922],
-    image:'tcoer.jpg'
+   image:'images/tcoer.jpg'
   },
 
   {
     id:'tae',
     name:'TAE (Trinity Academy of Engineering)',
     coords:[18.421800,73.905700],
-    image:'tae.jpg'
+    image:'images/tae.jpg'
   },
 
   {
     id:'management',
     name:'KJ College of Management Research Engineering',
     coords:[18.421600,73.904900],
-    image:'kj.jpg'
+    image:'images/kj.jpg'
   },
 
   {
     id:'trinity_school',
     name:'Trinity International School',
     coords:[18.4203341,73.9044704],
-    image:'school.jpg'
+    image:'images/school.jpg'
   },
 
   {
     id:'swimming_pool',
     name:'Swimming Pool',
     coords:[18.422132,73.904171],
-    image:'pool.jpg'
+    image:'images/pool.jpg'
   },
 
   {
     id:'turf',
     name:'Turf',
     coords:[18.423326,73.905940],
-    image:'turf.jpg'
+    image:'images/turf.jpg'
   },
 
   {
     id:'pharmacy',
     name:'Pharmacy College',
     coords:[18.421304,73.907801],
-    image:'pharmacy.jpg'
+    image:'images/pharmacy.jpeg'
   },
 
   {
     id:'law',
     name:'Law College',
     coords:[18.421459,73.907606],
-    image:'law.jpg'
+    image:'images/law.jpg'
   },
 
   {
@@ -1250,84 +973,84 @@ const PLACES = [
     id:'hostel',
     name:'Hostel',
     coords:[18.4232272,73.9032621],
-    image:'hostel.jpg'
+    image:'images/hostel.jpg'
   },
 
   {
     id:'basketball',
     name:'Basketball Court',
     coords:[18.422745,73.906447],
-    image:'basketball.jpg'
+    image:'images/basketball.jpeg'
   },
 
   {
     id:'cricket',
     name:'Cricket Ground',
     coords:[18.422966,73.904883],
-    image:'cricket.jpg'
+    image:'images/cricket.jpeg'
   },
 
   {
     id:'mais_canteen',
     name:"Mai's Canteen",
     coords:[18.4229835,73.9038578],
-    image:'mais_canteen.jpg'
+    image:'images/mais_canteen.jpeg'
   },
 
   {
     id:'main_parking',
     name:'Main Parking',
     coords:[18.421481,73.904531],
-    image:'main_parking.jpg'
+    image:'images/main_parking.jpg'
   },
 
   {
     id:'second_parking',
     name:'Second Parking',
     coords:[18.421684,73.906165],
-    image:'second_parking.jpg'
+    image:'images/second_parking.jpg'
   },
 
   {
     id:'architecture',
     name:'Architecture College',
     coords:[18.421609,73.907558],
-    image:'architecture.jpg'
+    image:'images/architecture.jpeg'
   },
 
   {
     id:'anna_canteen',
     name:'Anna Canteen',
     coords:[18.421899,73.904035],
-    image:'anna_canteen.jpg'
+    image:'images/anna_canteen.jpg'
   },
 
   {
     id:'stationary',
     name:'Campus Stationery',
     coords:[18.421481,73.904531],
-    image:'stationery.jpg'
+    image:'images/stationary.jpeg'
   },
 
   {
     id:'cafe',
     name:'Cafe',
     coords:[18.4236875,73.9032781],
-    image:'cafe.jpg'
+    image:'images/cafe.jpg'
   },
 
   {
     id:'canteen',
     name:'KJ Canteen',
     coords:[18.421411,73.906255],
-    image:'canteen.jpg'
+    image:'images/kjcanteen.jpg'
   },
 
   {
     id:'management2',
     name:'TIMR',
     coords:[18.421219,73.906921],
-    image:'timr.jpg'
+    image:'images/timr.jpeg'
   }
 
 ];
@@ -1408,37 +1131,8 @@ management2:"टीआयएमआर"
 
 };
 
-function getPlaceName(id) {
-
-    // Check if translation exists in selected language
-    if (
-        PLACE_TRANSLATIONS[selectedLang] &&
-        PLACE_TRANSLATIONS[selectedLang][id]
-    ) {
-        return PLACE_TRANSLATIONS[selectedLang][id];
-    }
-
-    // Otherwise return English translation
-    if (
-        PLACE_TRANSLATIONS.en &&
-        PLACE_TRANSLATIONS.en[id]
-    ) {
-        return PLACE_TRANSLATIONS.en[id];
-    }
-
-    // Last fallback
-    return id;
-}
-
 /* ---------- App state ---------- */
 let selectedLang = 'en';
-let mapInstance = null;
-let markers = {}; // id -> marker
-let startMarker = null;
-let destMarker = null;
-let routingControl = null;
-let watchId = null;
-let currentRotation = 0; // degrees
 const TCOER_COORDS = [18.421541,73.905922];
 const REACH_RADIUS_METERS = 100; // show dept box when inside ~25 m
 
@@ -1468,261 +1162,31 @@ function chooseLanguage(code){
     }else{
         document.getElementById("detailsScreen").style.display = "flex";
     }
+    const tr = T[selectedLang] || T.en;
+
+document.getElementById("locationTitle").textContent =
+    tr.locationTitle || "Select your destination";
+
+document.getElementById("locationSubtitle").textContent =
+    tr.locationSubtitle || "Choose a campus location to start navigation";
 }
 
 /* ---------- apply translations ---------- */
 function applyTranslations(){
-  const tr = T[selectedLang] || T.en;
-  document.getElementById('destLabel').textContent = tr.destLabel;
-  document.getElementById('navigateBtn').textContent = tr.navigate;
-  document.getElementById('stopBtn').textContent = tr.stop;
-  document.getElementById('autoLabel').textContent = tr.auto;
-  document.getElementById('status').textContent = tr.waiting;
-  document.getElementById('deptTitle').textContent = tr.deptTitle;
 
+    const tr = T[selectedLang] || T.en;
+
+    document.getElementById("locationTitle").textContent =
+        tr.locationTitle || "Select your destination";
+
+    document.getElementById("locationSubtitle").textContent =
+        tr.locationSubtitle || "Choose a campus location to start navigation";
   // update dept buttons (labels remain english names with numbers)
- const deptSelect = document.getElementById("deptSelect");
 
-const departments = [
-    "First Year Department",
-    "IT Department",
-    "ENTC Department",
-    "C.S Department",
-    "Electrical Department",
-    "M.B.A Department",
-    "Civil Department"
-];
-
-deptSelect.innerHTML = '<option value="">-- Select Department --</option>';
-
-departments.forEach((dept) => {
-    const option = document.createElement("option");
-    option.value = dept;
-    option.textContent = dept;
-    deptSelect.appendChild(option);
-});
-
-  // fill destination dropdown with places (clear then add)
-  const sel = document.getElementById('destinationSelect');
-  sel.innerHTML = '';
-  PLACES.forEach(p=>{
-    const opt = document.createElement('option');
-    opt.value = `${p.coords[0]},${p.coords[1]}`;
-   opt.textContent = getPlaceName(p.id);
-    sel.appendChild(opt);
-  });
-}
-
-/* ---------- create map, markers, tracking ---------- */
-function initMapAndUI(){
-  if(mapInstance) return; // already initialized
-
-  // init map
-  mapInstance = L.map('map', { zoomControl:true }).setView([18.4223,73.9055], 17);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:'© OpenStreetMap contributors'
-  }).addTo(mapInstance);
-
-  // icons
-  const baseIconUrl = 'https://cdn-icons-png.flaticon.com/512/684/684908.png';
-  const startIcon = L.icon({ iconUrl: baseIconUrl, iconSize:[40,40], iconAnchor:[20,40] });
-  const destIcon = L.icon({ iconUrl: baseIconUrl, iconSize:[40,40], iconAnchor:[20,40], className:'green-marker' });
-
-  // add markers for all PLACES
-  PLACES.forEach(place=>{
-    const m = L.marker(place.coords, { title: place.name, alt: place.name, riseOnHover:true }).addTo(mapInstance);
-    m.bindPopup(`<strong>${escapeHtml(place.name)}</strong><br><button onclick="onMarkerNavigate('${place.coords[0]},${place.coords[1]}')">Go to this place</button>`);
-    m.on('click', ()=> {
-      // open popup (already happens) - nothing else
-    });
-    markers[place.id] = m;
-  });
-
-  // allow clicking on map to set destination
-  mapInstance.on('click', function(e){
-    const lat = e.latlng.lat, lng = e.latlng.lng;
-    // set destination marker & route
-    setDestination([lat,lng], "Custom point");
-  });
-
-  // rotate controls
-  document.getElementById('rotateLeftBtn').addEventListener('click', ()=> rotateMap(-15));
-  document.getElementById('rotateRightBtn').addEventListener('click', ()=> rotateMap(15));
-  document.getElementById('rotateResetBtn').addEventListener('click', ()=> rotateMap(0,true));
-
-  // navigation buttons
-  document.getElementById('navigateBtn').addEventListener('click', ()=>{
-    const val = document.getElementById('destinationSelect').value.split(',').map(Number);
-    if(!startMarker){ alert(T[selectedLang].waiting); return; }
-    setDestination(val, document.getElementById('destinationSelect').selectedOptions[0].text);
-  });
-
-  document.getElementById('stopBtn').addEventListener('click', ()=> {
-    stopNavigation();
-  });
-
-  // dept buttons
- document.getElementById("deptGoBtn").addEventListener("click", () => {
-
-    const deptSelect = document.getElementById("deptSelect");
-
-    if (deptSelect.selectedIndex === 0) {
-        alert("Please select a department.");
-        return;
-    }
-
-    // selectedIndex-1 because the first option is "Select Department"
-    const opt = deptSelect.selectedIndex;
-
-    const msg = (T[selectedLang] &&
-                 T[selectedLang].deptMessages &&
-                 T[selectedLang].deptMessages[opt])
-        ? T[selectedLang].deptMessages[opt]
-        : T.en.deptMessages[opt];
-
-    showMessage(msg);
-});
-
-  // start geolocation tracking
-  startTracking();
-}
-
-/* ---------- marker "Go to this place" handler used inside popup (global) ---------- */
-function onMarkerNavigate(latlngStr){
-  const arr = latlngStr.split(',').map(Number);
-  setDestination(arr, 'Selected place');
-}
-
-/* ---------- setDestination: placeCoords is [lat,lng] ---------- */
-function setDestination(placeCoords, placeName){
-  const destLat = placeCoords[0], destLng = placeCoords[1];
-
-  // place dest marker
-  if(destMarker) mapInstance.removeLayer(destMarker);
-  const destIcon = L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize:[40,40], iconAnchor:[20,40], className:'green-marker' });
-  destMarker = L.marker([destLat,destLng], { icon: destIcon }).addTo(mapInstance).bindPopup(`<strong>${escapeHtml(placeName)}</strong>`).openPopup();
-
-  // draw route from current start to dest
-  if(!startMarker){
-    alert( T[selectedLang].waiting );
-    return;
-  }
-  const startLatLng = startMarker.getLatLng();
-  if(routingControl) mapInstance.removeControl(routingControl);
-
-  routingControl = L.Routing.control({
-    waypoints: [ startLatLng, L.latLng(destLat,destLng) ],
-    routeWhileDragging: false,
-    addWaypoints: false,
-    draggableWaypoints: false,
-    fitSelectedRoutes: true,
-    showAlternatives:false,
-    lineOptions: { styles: [{ color: '#0066ff', weight:6, opacity:0.9 }] }
-  }).addTo(mapInstance);
-
-  document.getElementById('status').textContent = T[selectedLang].started;
-}
-
-/* ---------- stop navigation ---------- */
-function stopNavigation(){
-  if(watchId) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-  if(routingControl){ mapInstance.removeControl(routingControl); routingControl = null; }
-  if(destMarker){ mapInstance.removeLayer(destMarker); destMarker = null; }
-  document.getElementById('status').textContent = T[selectedLang].stopped;
-}
-
-/* ---------- start tracking, add start marker ---------- */
-function startTracking(){
-  if(!navigator.geolocation){
-    alert('Geolocation unsupported');
-    return;
-  }
-  function onPos(pos){
-    const lat = pos.coords.latitude, lng = pos.coords.longitude;
-    if(!startMarker){
-      const startIcon = L.icon({ iconUrl:'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize:[40,40], iconAnchor:[20,40] });
-      startMarker = L.marker([lat,lng], { icon:startIcon }).addTo(mapInstance).bindPopup(T[selectedLang].current).openPopup();
-      // center map first time
-      mapInstance.setView([lat,lng], 17);
-    } else {
-      startMarker.setLatLng([lat,lng]);
-    }
-
-    if(document.getElementById('autoCenter').checked){
-      mapInstance.panTo([lat,lng]);
-    }
-
-    document.getElementById('status').textContent = `${T[selectedLang].current}: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-
-    // check proximity to TCOER to show department box
-    const d = haversineMeters(lat,lng, TCOER_COORDS[0], TCOER_COORDS[1]);
-    if (d <= REACH_RADIUS_METERS) { // Corrected from 'dist' to 'd'
-        deptBox.style.display = 'flex';
-        showMessage("You have reached TCOER! Please select your department.");
-    } else {
-        deptBox.style.display = 'none';
-    }
 
 }
 
-
-
-  function onErr(e){
-    document.getElementById('status').textContent = T[selectedLang].denied;
-    alert(T[selectedLang].denied);
-  }
-
-  watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy:true, maximumAge:0, timeout:20000 });
-}
-
-/* ---------- rotation helpers (applies CSS transform to map container) ---------- */
-function rotateMap(deltaDegrees, reset=false){
-  if(reset) currentRotation = 0;
-  else currentRotation = (currentRotation + deltaDegrees) % 360;
-  const mapEl = document.getElementById('map');
-  // apply rotation transform; keep transform-origin center
-  mapEl.style.transformOrigin = '50% 50%';
-  mapEl.style.transition = 'transform 0.25s linear';
-  mapEl.style.transform = `rotate(${currentRotation}deg)`;
-  // need to rotate map internals back so controls/tiles align — best-effort: rotate map container only;
-  // Note: rotating Leaflet map like this is a visual rotation. For more advanced rotation (bearing) use plugins.
-}
-
-/* ---------- showMessage for dept instructions ---------- */
-function showMessage(msg){
-    const box = document.getElementById('messageBox');
-
-    box.textContent = msg;
-    box.style.display = 'block';
-    box.style.opacity = '1';
-
-    setTimeout(() => {
-        box.style.opacity = '0';
-
-        setTimeout(() => {
-            box.style.display = 'none';
-            box.style.opacity = '1';
-        }, 400);
-
-    }, 5000);
-}
-
-/* ---------- simple Haversine to compute meters ---------- */
-function haversineMeters(lat1,lon1,lat2,lon2){
-  const R = 6371000;
-  const φ1 = lat1 * Math.PI/180;
-  const φ2 = lat2 * Math.PI/180;
-  const Δφ = (lat2-lat1) * Math.PI/180;
-  const Δλ = (lon2-lon1) * Math.PI/180;
-  const a = Math.sin(Δφ/2)*Math.sin(Δφ/2) + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)*Math.sin(Δλ/2);
-  const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R*c;
-}
-
-/* ---------- small utility: escape HTML for popup titles ---------- */
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
-}
+/* ---------- map helper logic removed ---------- */
 
 /* ---------- initial default: populate UI translations for default language en ---------- */
 applyTranslations();
@@ -1763,7 +1227,7 @@ document.getElementById("detailsNextBtn").onclick = function () {
         return;
     }
 
-   fetch("http://localhost:3000/save-user", {
+   fetch("http://localhost:5000/save-user", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -1773,29 +1237,44 @@ document.getElementById("detailsNextBtn").onclick = function () {
             phone: userPhone
         })
     })
-    .then(res => res.json())
-   .then(data => {
-    if(data.success){
+  .then(async res => {
+    const data = await res.json();
+    console.log("Status:", res.status);
+    console.log("Response:", data);
 
-        // Remember this browser has already registered
+    if (data.success) {
+
         localStorage.setItem("userRegistered", "true");
-
         document.getElementById("detailsScreen").style.display = "none";
         showLocationScreen();
 
-    }else {
+    } else {
 
-            alert("Unable to save user details.");
+        alert("Database Error: " + (data.error || "Unknown"));
 
-        }
-
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Server error.");
-    });
+    }
+})
+   .catch(err => {
+    console.error("Fetch Error:", err);
+    alert(err.message);
+});
 
 };
+function getPlaceName(id) {
+
+    if (
+        PLACE_TRANSLATIONS[selectedLang] &&
+        PLACE_TRANSLATIONS[selectedLang][id]
+    ) {
+        return PLACE_TRANSLATIONS[selectedLang][id];
+    }
+
+    if (PLACE_TRANSLATIONS.en[id]) {
+        return PLACE_TRANSLATIONS.en[id];
+    }
+
+    return id;
+}
 
 function showLocationScreen(){
 
@@ -1817,15 +1296,18 @@ function showLocationScreen(){
     card.style.transition=".3s";
 
     card.innerHTML=`
-        <img src="images/${place.id}.jpg"
+       <img src="${place.image}"
+     onerror="this.src='images/default.jpg'"
              style="width:100%;height:200px;object-fit:cover;">
 
-        <h3 style="
-            margin:15px;
-            color:#0F2027;
-            text-align:center;">
-            ${getPlaceName(place.id)}
-        </h3>
+       <h3 style="
+margin:15px;
+color:#0F2027;
+text-align:center;
+font-size:20px;
+font-weight:bold;">
+${getPlaceName(place.id)}
+</h3>
     `;
 
     card.onmouseenter=()=>{
@@ -1836,30 +1318,54 @@ function showLocationScreen(){
         card.style.transform="scale(1)";
     };
 
-    card.onclick=function(){
+   card.onclick = function () {
 
-        document.getElementById("locationScreen").style.display="none";
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported.");
+        return;
+    }
 
-        document.getElementById("map").style.display="block";
+   navigator.geolocation.getCurrentPosition(
 
-        document.getElementById("controls").style.display="flex";
+function(position){
 
-        initMapAndUI();
+    const origin =
+        position.coords.latitude + "," +
+        position.coords.longitude;
 
-        applyTranslations();
+    const destination =
+        place.coords[0] + "," +
+        place.coords[1];
 
-        document.getElementById("destinationSelect").value=
-        `${place.coords[0]},${place.coords[1]}`;
+   const url =
+    `https://www.google.com/maps/dir/?api=1` +
+    `&origin=${origin}` +
+    `&destination=${destination}` +
+    `&travelmode=walking` +
+    `&dir_action=navigate`;
 
-        document.getElementById("navigateBtn").click();
-    };
+window.open(url, "_blank");
+},
+
+function(error){
+
+    alert("Please allow location access.");
+
+},
+
+{
+    enableHighAccuracy:true
+}
+
+);
+
+};
 
     list.appendChild(card);
 
-});
+   });
 
 }
-
 
 </script>
 

@@ -4,7 +4,7 @@ const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
 // Parse JSON
 app.use(express.json());
@@ -34,6 +34,9 @@ db.run(`
 
 app.post("/save-user", (req, res) => {
 
+    console.log("Request received");
+    console.log(req.body);
+
     const { name, phone } = req.body;
 
     const sql = "INSERT INTO users (name, phone) VALUES (?, ?)";
@@ -41,14 +44,14 @@ app.post("/save-user", (req, res) => {
     db.run(sql, [name, phone], function(err) {
 
         if (err) {
-            console.error(err.message);
-            return res.json({ success: false });
+            console.log(err);
+            return res.status(500).json({ success: false });
         }
 
+        console.log("Inserted:", this.lastID);
+
         res.json({ success: true });
-
     });
-
 });
 
 // Start server
