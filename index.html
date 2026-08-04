@@ -710,15 +710,18 @@ Continue
 </div>
 
 <!-- Department selection (appears at TCOER) -->
-<div id="deptBox" role="dialog" aria-modal="true">
-  <h3 id="deptTitle">Select Department:</h3>
-  <button class="dept-btn" data-opt="1">1. First Year Department</button>
-  <button class="dept-btn" data-opt="2">2. IT Department</button>
-  <button class="dept-btn" data-opt="3">3. ENTC Department</button>
-  <button class="dept-btn" data-opt="4">4. C.S Department</button>
-  <button class="dept-btn" data-opt="5">5. Electrical Department</button>
-  <button class="dept-btn" data-opt="6">6. M.B.A Department</button>
-  <button class="dept-btn" data-opt="7">7. Civil Department</button>
+<div id="deptBox" style="display:none;">
+    <label id="deptTitle" for="deptSelect">
+    <b>Select Department</b>
+</label><br>
+
+    <select id="deptSelect">
+        <option value="">-- Select Department --</option>
+    </select>
+
+    <br><br>
+
+    <button id="deptGoBtn">Continue</button>
 </div>
 
 <div id="messageBox" role="status"></div>
@@ -1451,14 +1454,20 @@ languageList.forEach(l => {
 
 /* ---------- choose language, initialize UI ---------- */
 function chooseLanguage(code){
-  if(!T[code]) code = 'en';
-  selectedLang = code;
 
-document.getElementById("languageScreen").style.display="none";
+    if(!T[code]) code = 'en';
+    selectedLang = code;
 
-document.getElementById("detailsScreen").style.display="flex";
+    document.getElementById("languageScreen").style.display = "none";
 
-applyTranslations();
+    applyTranslations();
+
+    // If this browser has already registered, skip details
+    if(localStorage.getItem("userRegistered") === "true"){
+        showLocationScreen();
+    }else{
+        document.getElementById("detailsScreen").style.display = "flex";
+    }
 }
 
 /* ---------- apply translations ---------- */
@@ -1472,9 +1481,26 @@ function applyTranslations(){
   document.getElementById('deptTitle').textContent = tr.deptTitle;
 
   // update dept buttons (labels remain english names with numbers)
-  const deptButtons = document.querySelectorAll('#deptBox .dept-btn');
-  const namesEN = ["1. First Year Department","2. IT Department","3. ENTC Department","4. C.S Department","5. Electrical Department","6. M.B.A Department","7. Civil Department"];
-  deptButtons.forEach((b,i)=> b.textContent = namesEN[i]);
+ const deptSelect = document.getElementById("deptSelect");
+
+const departments = [
+    "First Year Department",
+    "IT Department",
+    "ENTC Department",
+    "C.S Department",
+    "Electrical Department",
+    "M.B.A Department",
+    "Civil Department"
+];
+
+deptSelect.innerHTML = '<option value="">-- Select Department --</option>';
+
+departments.forEach((dept) => {
+    const option = document.createElement("option");
+    option.value = dept;
+    option.textContent = dept;
+    deptSelect.appendChild(option);
+});
 
   // fill destination dropdown with places (clear then add)
   const sel = document.getElementById('destinationSelect');
@@ -1536,13 +1562,26 @@ function initMapAndUI(){
   });
 
   // dept buttons
-  document.querySelectorAll('#deptBox .dept-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const opt = Number(btn.dataset.opt);
-      const msg = (T[selectedLang] && T[selectedLang].deptMessages && T[selectedLang].deptMessages[opt]) ? T[selectedLang].deptMessages[opt] : T.en.deptMessages[opt];
-      showMessage(msg);
-    });
-  });
+ document.getElementById("deptGoBtn").addEventListener("click", () => {
+
+    const deptSelect = document.getElementById("deptSelect");
+
+    if (deptSelect.selectedIndex === 0) {
+        alert("Please select a department.");
+        return;
+    }
+
+    // selectedIndex-1 because the first option is "Select Department"
+    const opt = deptSelect.selectedIndex;
+
+    const msg = (T[selectedLang] &&
+                 T[selectedLang].deptMessages &&
+                 T[selectedLang].deptMessages[opt])
+        ? T[selectedLang].deptMessages[opt]
+        : T.en.deptMessages[opt];
+
+    showMessage(msg);
+});
 
   // start geolocation tracking
   startTracking();
@@ -1687,7 +1726,6 @@ function escapeHtml(s){
 
 /* ---------- initial default: populate UI translations for default language en ---------- */
 applyTranslations();
-
 window.onload = function () {
 
     setTimeout(function () {
@@ -1710,28 +1748,52 @@ window.onload = function () {
 let userName = "";
 let userPhone = "";
 
-document.getElementById("detailsNextBtn").onclick=function(){
+document.getElementById("detailsNextBtn").onclick = function () {
 
-    userName=document.getElementById("userName").value.trim();
+    userName = document.getElementById("userName").value.trim();
+    userPhone = document.getElementById("userPhone").value.trim();
 
-    userPhone=document.getElementById("userPhone").value.trim();
-
-    if(userName==""){
+    if (userName === "") {
         alert("Please enter your name");
         return;
     }
 
-    if(!/^[0-9]{10}$/.test(userPhone)){
+    if (!/^[0-9]{10}$/.test(userPhone)) {
         alert("Enter a valid 10 digit phone number");
         return;
     }
 
-    localStorage.setItem("userName", userName);
-    localStorage.setItem("userPhone", userPhone);
+   fetch("http://localhost:3000/save-user", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+        body: JSON.stringify({
+            name: userName,
+            phone: userPhone
+        })
+    })
+    .then(res => res.json())
+   .then(data => {
+    if(data.success){
 
-    document.getElementById("detailsScreen").style.display="none";
+        // Remember this browser has already registered
+        localStorage.setItem("userRegistered", "true");
 
-    showLocationScreen();
+        document.getElementById("detailsScreen").style.display = "none";
+        showLocationScreen();
+
+    }else {
+
+            alert("Unable to save user details.");
+
+        }
+
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Server error.");
+    });
 
 };
 
