@@ -1,0 +1,19 @@
+
+# Ignore environment variable files
+.env
+serviceAccountKey.json
+
+# Private key files
+*.key
+*.pem
+
+# Node modules (if applicable)
+node_modules/
+
+# Python cache (if applicable)
+__pycache__/
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
